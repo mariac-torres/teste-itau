@@ -1,0 +1,71 @@
+#coding:utf-8 
+
+def transf_aprovada(saldo_emissor,saldo_receptor,valor_transf):
+    saldo_emissor -= valor_transf
+    saldo_receptor += valor_transf
+    print("\nSua transferência foi realizada com sucesso!\nSaldo do emissor: R${}\nSaldo do receptor: R${}".format("%.2f" % saldo_emissor, "%.2f" % saldo_receptor))
+
+def erro_valores(valor_transf, tipo_transf):
+    if valor_transf <= 5000:
+        if tipo_transf == "TED":
+            print("\nNão foi possivel completar sua transação! Transferências via TED são permitidas apenas para valores entre R$ 5 mil e R$ 10 mil")
+        else:
+            print("\nNão foi possivel completar sua transação! Transferências via DOC são permitidas apenas para valores acima de R$ 10 mil")
+    elif 5000 < valor_transf <= 10000:
+        if tipo_transf == "PIX":
+            print("\nNão foi possivel completar sua transação! Você excedeu o limite de R$ 5 mil para transferências Pix")
+        else:
+            print("\Não foi possivel completar sua transação! Transferências via DOC são permitidas apenas para valores acima de R$ 10 mil")
+    else:
+        if tipo_transfer == "PIX":
+            print("\nNão foi possivel completar sua transação! Você excedeu o limite de R$ 5 mil para transferências Pix")
+        else:
+            print("\nNão foi possivel completar sua transação! Transferências via TED são permitidas apenas para valores entre R$ 5 mil e R$ 10 mil")
+
+def validadorCPF(cpf_busca):
+    cpf = [int(char) for char in cpf_busca if char.isdigit()]
+    if len(cpf) != 11:
+        return False
+    else:
+        return True
+
+#ENTRADAS
+saldo_emissor=0
+saldo_receptor=0
+
+valor_transf=float(input("Digite o Valor da Transferência "))
+tipo_transf=str(input("Escolha o tipo de transferência (Métodos de transferências validas PIX, TED ou DOC) "))
+nome_emissor=str(input("Digite o nome do emissor "))
+ag_emissor=int(input("Digite a agência do emissor {} ".format(nome_emissor)))
+conta_emissor=int(input("Digite o número da conta do emissor {} ".format(nome_emissor)))
+cpf_emissor=input("Digite o CPF do emissor {}? (no formato XXX.XXX.XXX-XX) ".format(nome_emissor))
+nome_receptor=str(input("Digite o nome do receptor? "))
+ag_receptor=int(input("Digite a agência do receptor {}? ".format(nome_receptor)))
+conta_receptor=int(input("Digite o número da conta do receptor {}? ".format(nome_receptor)))
+cpf_receptor=input("Digite o CPF do receptor {}? (no formato XXX.XXX.XXX-XX) ".format(nome_receptor))
+
+#PROCESSAMENTO
+if validarCPF(cpf_emissor) and validarCPF(cpf_receptor):
+    if tipo_transf == "PIX" or tipo_transf == "TED" or tipo_transf == "DOC":
+        if conta_emissor == conta_receptor and ag_emissor == ag_receptor:
+            print("\nSua transferência não foi completada pois a agência e conta do emissor são as mesmas do receptor")
+        else:
+            if valor_transf <= 5000:
+                if tipo_transf == "PIX":
+                    transf_aprovada(saldo_emissor,saldo_receptor, valor_transf)
+                else:
+                    erro_valores(valor_transf,tipo_transf)
+            elif 5000 < valor_transf <= 10000:
+                if tipo_transf == "TED":
+                    transf_aprovada(saldo_emissor,saldo_receptor, valor_transf)
+                else:
+                    erro_valores(valor_transf,tipo_transf)
+            else:
+                if tipo_transf == "DOC":
+                    transf_aprovada(saldo_emissor,saldo_receptor, valor_transf)
+                else:
+                    erro_valores(valor_transf,tipo_transf)
+    else:
+        print("\nSua transferência não pode ser completada! Selecione um método de transferência valido para prosseguir. (Métodos de transferências validas PIX, TED ou DOC)")
+else:
+    print("\nSua transferência não pode ser completada! CPF do receptor/emissor invalido")
