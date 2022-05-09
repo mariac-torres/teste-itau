@@ -1,0 +1,71 @@
+#coding:utf-8 
+
+def transferencia_aprovada(saldo_emissor,saldo_receptor,valor_transferencia):
+    saldo_emissor -= valor_transferencia
+    saldo_receptor += valor_transferencia
+    print("\nSua transferência foi realizada com sucesso!\nSaldo do emissor: R${}\nSaldo do receptor: R${}".format("%.2f" % saldo_emissor, "%.2f" % saldo_receptor))
+
+def erro_valores(valor_transferencia, tipo_transferencia):
+    if valor_transferencia<= 5000:
+        if tipo_transferencia== "TED":
+            print("\nNão foi possivel completar sua transação! Transferências via TED são permitidas apenas para valores entre R$ 5 mil e R$ 10 mil")
+        else:
+            print("\nNão foi possivel completar sua transação! Transferências via DOC são permitidas apenas para valores acima de R$ 10 mil")
+    elif 5000 < valor_transferencia <= 10000:
+        if tipo_transferencia == "PIX":
+            print("\nNão foi possivel completar sua transação! Você excedeu o limite de R$ 5 mil para transferências Pix")
+        else:
+            print("\Não foi possivel completar sua transação! Transferências via DOC são permitidas apenas para valores acima de R$ 10 mil")
+    else:
+        if tipo_transferencia == "PIX":
+            print("\nNão foi possivel completar sua transação! Você excedeu o limite de R$ 5 mil para transferências Pix")
+        else:
+            print("\nNão foi possivel completar sua transação! Transferências via TED são permitidas apenas para valores entre R$ 5 mil e R$ 10 mil")
+
+def validadorCPF(cpf_busca):
+    cpf = [int(char) for char in cpf_busca if char.isdigit()]
+    if len(cpf) != 11:
+        return False
+    else:
+        return True
+
+#ENTRADAS
+saldo_emissor=0
+saldo_receptor=0
+
+valor_transferencia=float(input("Digite o Valor da Transferência "))
+tipo_transferencia=str(input("Escolha o tipo de transferência (Métodos de transferências validas PIX, TED ou DOC) "))
+nome_emissor=str(input("Digite o nome do emissor "))
+ag_emissor=int(input("Digite a agência do emissor {} ".format(nome_emissor)))
+conta_emissor=int(input("Digite o número da conta do emissor {} ".format(nome_emissor)))
+cpf_emissor=input("Digite o CPF do emissor {}? (no formato XXX.XXX.XXX-XX) ".format(nome_emissor))
+nome_receptor=str(input("Digite o nome do receptor? "))
+ag_receptor=int(input("Digite a agência do receptor {}? ".format(nome_receptor)))
+conta_receptor=int(input("Digite o número da conta do receptor {}? ".format(nome_receptor)))
+cpf_receptor=input("Digite o CPF do receptor {}? (no formato XXX.XXX.XXX-XX) ".format(nome_receptor))
+
+#PROCESSAMENTO
+if validarCPF(cpf_emissor) and validarCPF(cpf_receptor):
+    if tipo_transferencia == "PIX" or tipo_transferencia == "TED" or tipo_transferencia == "DOC":
+        if conta_emissor == conta_receptor and ag_emissor == ag_receptor:
+            print("\nSua transferência não foi completada pois a agência e conta do emissor são as mesmas do receptor")
+        else:
+            if valor_transferencia <= 5000:
+                if tipo_transferencia== "PIX":
+                    transferencia_aprovada(saldo_emissor,saldo_receptor, valor_transferencia)
+                else:
+                    erro_valores(valor_transferencia,tipo_transferencia)
+            elif 5000 < valor_transferencia<= 10000:
+                if tipo_transferencia == "TED":
+                    transferencia_aprovada(saldo_emissor,saldo_receptor, valor_transferencia)
+                else:
+                    erro_valores(valor_transferencia,tipo_transferencia)
+            else:
+                if tipo_transferencia == "DOC":
+                    transferencia_aprovada(saldo_emissor,saldo_receptor, valor_transferencia)
+                else:
+                    erro_valores(valor_transferencia,tipo_transferencia)
+    else:
+        print("\nSua transferência não pode ser completada! Selecione um método de transferência valido para prosseguir. (Métodos de transferências validas PIX, TED ou DOC)")
+else:
+    print("\nSua transferência não pode ser completada! CPF do receptor/emissor invalido")
